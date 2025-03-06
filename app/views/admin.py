@@ -37,8 +37,7 @@ def login():
         user = User.query.filter_by(username=username).first()
         if user and check_password_hash(user.password, password):
             session['user_id'] = user.id
-            next_url = request.args.get('next') or url_for('admin.admin_index')
-            return redirect(next_url)
+            return redirect(url_for('admin.admin_index'))
         else:
             error = 'ユーザー名またはパスワードが正しくありません'
     return render_template_string(login_template, error=error)
