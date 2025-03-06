@@ -1,0 +1,26 @@
+services:
+  mysql:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: app_db
+      MYSQL_USER: appuser
+      MYSQL_PASSWORD: apppassword
+    volumes:
+      - ./seed.sql:/docker-entrypoint-initdb.d/seed.sql
+    ports:
+      - "3306:3306"
+
+  app:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      MYSQL_USER: appuser
+      MYSQL_PASSWORD: apppassword
+      MYSQL_HOST: mysql
+      MYSQL_DATABASE: app_db
+      MYSQL_PORT: 3306
+    depends_on:
+      - mysql
